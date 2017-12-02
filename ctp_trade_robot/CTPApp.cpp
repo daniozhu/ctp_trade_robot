@@ -1,25 +1,27 @@
 #include "stdafx.h"
+
 #include "CTPApp.h"
+#include "CtpLog.h"
 
-
-CTPApp::CTPApp()
+CtpApp::CtpApp()
 {
 	TCHAR exeFullPath[MAX_PATH] = { 0 };
 	::GetModuleFileName(NULL, exeFullPath, MAX_PATH);
 
 	// Find last file path seperator
 	TCHAR* pFind = _tcsrchr(exeFullPath, L'\\');
-	assert(pFind != nullptr && L"Invalid application path");
-	if (pFind != nullptr)
-	{
-		*pFind = L'\0';
-		m_appDir = exeFullPath;
+	if (nullptr == pFind) {
+		CtpLog::Get()->Write(CtpLog::LogLevel::eError, L"Invalid application path");
+		return;
 	}
+
+	*pFind = L'\0';
+	m_appDir = exeFullPath;
 }
 
-CTPApp * CTPApp::Get()
+CtpApp * CtpApp::Get()
 {
-	static CTPApp s_ctpApp;
+	static CtpApp s_ctpApp;
 	return &s_ctpApp;
 }
 

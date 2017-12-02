@@ -1,5 +1,7 @@
 #include "stdafx.h"
+
 #include "CMarketDataDownLoader.h"
+#include "CtpLog.h"
 
 const static unsigned int MAX_BLOCK_SIZE = 1024;
 
@@ -8,12 +10,15 @@ const static unsigned int MAX_BLOCK_SIZE = 1024;
 bool CMarketDataDownLoader::Download(const std::wstring & sURL, const std::wstring& sLocalPath)
 {
 	HINTERNET hInternet = InternetOpen(NULL, INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
-	if (NULL == hInternet)
+	if (NULL == hInternet) {
+		CtpLog::Get()->Write(CtpLog::LogLevel::eError, L"Open internet failed - ");
 		return false;
+	}
 
 	HINTERNET hRequest = InternetOpenUrl(hInternet, sURL.c_str(), NULL, 0, INTERNET_FLAG_DONT_CACHE, 0);
 	if (NULL == hRequest)
 	{
+		CtpLog::Get()->Write(CtpLog::LogLevel::eError, L"Open URL failed - " + sURL);
 		InternetCloseHandle(hInternet);
 		return false;
 	}
@@ -24,6 +29,7 @@ bool CMarketDataDownLoader::Download(const std::wstring & sURL, const std::wstri
 	HttpQueryInfo(hRequest, HTTP_QUERY_STATUS_CODE | HTTP_QUERY_FLAG_NUMBER, &dwStatusCode, &dwStatusSize, NULL);
 	if (dwStatusCode != 200)
 	{
+		CtpLog::Get()->Write(CtpLog::LogLevel::eError, L"Download status is failed - " + sURL);
 		InternetCloseHandle(hInternet);
 		InternetCloseHandle(hRequest);
 		return false;
@@ -34,6 +40,7 @@ bool CMarketDataDownLoader::Download(const std::wstring & sURL, const std::wstri
 	HttpQueryInfo(hRequest, HTTP_QUERY_CONTENT_LENGTH | HTTP_QUERY_FLAG_NUMBER, &dwSize, &dwSizeLength, NULL);
 	if (dwSize < 0)
 	{
+		CtpLog::Get()->Write(CtpLog::LogLevel::eError, L"Download file size less than zero - " + sURL);
 		InternetCloseHandle(hInternet);
 		InternetCloseHandle(hRequest);
 		return false;
@@ -44,6 +51,7 @@ bool CMarketDataDownLoader::Download(const std::wstring & sURL, const std::wstri
 
 	if (INVALID_HANDLE_VALUE == hFile)
 	{
+		CtpLog::Get()->Write(CtpLog::LogLevel::eError, L"Create local market data file failed - " + sLocalPath);
 		InternetCloseHandle(hInternet);
 		InternetCloseHandle(hRequest);
 		return false;

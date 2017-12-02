@@ -1,8 +1,8 @@
 #pragma once
-class Util
+namespace Util
 {
-public:
-	static void FormatJsonData(const std::wstring& srcJsonFile, const std::wstring& destJsonFile);
+	void FormatJsonData(const std::wstring& srcJsonFile, const std::wstring& destJsonFile); 
+	std::wstring StringToWString(const std::string& srcString);
+	std::string  WStriingToString(const std::wstring& srcWString);
 
 };
-

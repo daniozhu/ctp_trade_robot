@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <tchar.h>
 #include <assert.h>
+#include <time.h>
 
 #include <fstream>
 #include <regex>

@@ -7,20 +7,21 @@
 #include "ConfigReader.h"
 #include "CTPApp.h"
 #include "Util.h"
+#include "CtpLog.h"
 
 using StringMap = std::map<std::wstring, std::wstring>;
 
 int main()
 {
-	std::wstring sIniPath = CTPApp::Get()->GetAppDir() + L"\\config.ini";
+	std::wstring sIniPath = CtpApp::Get()->GetAppDir() + L"\\config.ini";
 	ConfigReader configReader{sIniPath};
 
 	const StringVector& instrumentIds = configReader.GetInstrumentIds();
 	std::wstring sURL = configReader.GetMarketDataURL();
 
 	// download market data for each instrument id
-	std::wstring sMarketDataLocalDir		= CTPApp::Get()->GetAppDir() + L"\\RawMarketData";
-	std::wstring sMarketDataLocalDirFormat	= CTPApp::Get()->GetAppDir() + L"\\FormatMarketData";
+	std::wstring sMarketDataLocalDir		= CtpApp::Get()->GetAppDir() + L"\\RawMarketData";
+	std::wstring sMarketDataLocalDirFormat	= CtpApp::Get()->GetAppDir() + L"\\FormatMarketData";
 	if (!::PathFileExists(sMarketDataLocalDir.c_str())) {
 		::CreateDirectory(sMarketDataLocalDir.c_str(), nullptr);
 	}
@@ -55,6 +56,8 @@ int main()
 		instrumentIdMarketData.emplace(id, sMarketDataFormatPath);
 	}
 	
+	// TODO: Pass thedata to strategy
+	// TODO: make order according to the result ofthe strategy with the input market data
     return 0;
 }
 

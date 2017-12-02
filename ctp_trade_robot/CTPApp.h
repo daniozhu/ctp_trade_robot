@@ -1,16 +1,16 @@
 #pragma once
 #include <string>
 
-class CTPApp
+class CtpApp
 {
 public:
-	static CTPApp* Get();
+	static CtpApp* Get();
 
 	const std::wstring& GetAppDir() const { return m_appDir; }
 
 private:
-	CTPApp();
-	~CTPApp() = default;
+	CtpApp();
+	~CtpApp() = default;
 
 private:
 	std::wstring		m_appDir;
