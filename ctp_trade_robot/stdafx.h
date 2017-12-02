@@ -9,7 +9,17 @@
 
 #include <stdio.h>
 #include <tchar.h>
+#include <assert.h>
 
+#include <fstream>
+#include <regex>
 
+#include <map>
 
 // TODO: 在此处引用程序需要的其他头文件
+
+// Windows API
+#include <Shlwapi.h>
+#include <Windows.h>
+#include <WinInet.h>
+

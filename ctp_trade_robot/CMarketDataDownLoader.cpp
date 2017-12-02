@@ -1,10 +1,6 @@
 #include "stdafx.h"
 #include "CMarketDataDownLoader.h"
 
-#include <stdio.h>
-#include <Windows.h>
-#include <WinInet.h>
-
 const static unsigned int MAX_BLOCK_SIZE = 1024;
 
 #pragma comment(lib, "wininet.lib")
@@ -57,7 +53,6 @@ bool CMarketDataDownLoader::Download(const std::wstring & sURL, const std::wstri
 	byte buff[MAX_BLOCK_SIZE];
 	DWORD byteRead = 0;
 
-	//char buff[10000];
 	memset(buff, 0, sizeof(buff));
 
 	BOOL bRet = FALSE;

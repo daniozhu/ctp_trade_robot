@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="config.ini" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -27,6 +28,18 @@
     <ClInclude Include="CMarketDataDownLoader.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ConfigReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DataFormater.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CTPApp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -36,6 +49,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CMarketDataDownLoader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigReader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CTPApp.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DataFormater.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
