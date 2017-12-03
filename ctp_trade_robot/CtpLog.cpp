@@ -50,6 +50,7 @@ void CtpLog::Write(LogLevel leve, const std::wstring & rawMsg)
 		logMsg.append(L": [ERROR] ");
 		break;
 	default:
+		textColor.m_color = YELLOW_COLOR;
 		logMsg.append(L": Please specify a proper log level, ");
 	}
 

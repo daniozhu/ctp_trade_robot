@@ -56,7 +56,7 @@ int main()
 		instrumentIdMarketData.emplace(id, sMarketDataFormatPath);
 	}
 	
-	// TODO: Pass thedata to strategy
+	// TODO: Pass the data map to strategy
 	// TODO: make order according to the result ofthe strategy with the input market data
     return 0;
 }

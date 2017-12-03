@@ -81,6 +81,11 @@ bool CMarketDataDownLoader::Download(const std::wstring & sURL, const std::wstri
 	InternetCloseHandle(hRequest);
 	CloseHandle(hFile);
 
+	if (bRet)
+		CtpLog::Get()->Write(CtpLog::LogLevel::eNormal, L"Download and save market data successfully - " + sURL);
+	else
+		CtpLog::Get()->Write(CtpLog::LogLevel::eError, L"Download and save market data failed - " + sURL);
+
 	return bRet == TRUE ? true : false;
 }
 
