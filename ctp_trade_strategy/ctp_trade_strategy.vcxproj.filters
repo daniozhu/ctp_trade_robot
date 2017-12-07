@@ -33,6 +33,9 @@
     <ClInclude Include="strategy_base.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ILog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

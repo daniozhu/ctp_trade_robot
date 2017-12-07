@@ -58,7 +58,7 @@ void CtpLog::Write(LogLevel leve, const std::wstring & rawMsg)
 	logMsg.append(rawMsg);
 
 	// Output to console
-	std::cout << textColor << logMsg.c_str() << std::endl;
+	std::wcout << textColor << logMsg << std::endl;
 
 	// Write to log file
 	std::ofstream logFile;

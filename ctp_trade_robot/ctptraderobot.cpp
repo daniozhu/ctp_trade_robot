@@ -9,7 +9,7 @@
 #include "Util.h"
 #include "CtpLog.h"
 
-using StringMap = std::map<std::wstring, std::wstring>;
+#include "../ctp_trade_strategy/strategy_ma5_10.h"
 
 int main()
 {
@@ -56,7 +56,25 @@ int main()
 		instrumentIdMarketData.emplace(id, sMarketDataFormatPath);
 	}
 	
-	// TODO: Pass the data map to strategy
+	// Pass the data map to strategy
+	Strategy_MA5_10 strategy_M5_10{ instrumentIdMarketData, CtpLog::Get() };
+	bRet = strategy_M5_10.Process();
+	if (!bRet)
+	{
+		CtpLog::Get()->Write(ILog::LogLevel::eError, L"Strategy process failed!");
+		return -1;
+	}
+	
+	const Strategy::TradeSuggestions& suggestions = strategy_M5_10.GetTradeSuggestions();
+	if (suggestions.empty())
+	{
+		CtpLog::Get()->Write(ILog::LogLevel::eWarning, L"MA5_Ma10 strategy doesn't give any trade suggestions");
+		return 0;
+	}
+
+	// TODO: Start CTP data receiver and transaction process.
+
+
 	// TODO: make order according to the result ofthe strategy with the input market data
     return 0;
 }

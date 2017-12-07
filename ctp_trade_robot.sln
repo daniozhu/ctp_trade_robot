@@ -4,8 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ctp_trade_robot", "ctp_trade_robot\ctp_trade_robot.vcxproj", "{50E0DB66-2190-4953-A7E6-D77674D5F4D2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{64198AB2-81DB-45FA-9A12-ED803AC18A50} = {64198AB2-81DB-45FA-9A12-ED803AC18A50}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ctp_Trade_Strategy_UnitTest", "Ctp_Trade_UnitTest\Ctp_Trade_UnitTest.vcxproj", "{A1E85247-09F2-4189-81C6-B840823B0C58}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ctp_trade_strategy_unittest", "Ctp_Trade_UnitTest\Ctp_Trade_UnitTest.vcxproj", "{A1E85247-09F2-4189-81C6-B840823B0C58}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ctp_trade_strategy", "ctp_trade_strategy\ctp_trade_strategy.vcxproj", "{64198AB2-81DB-45FA-9A12-ED803AC18A50}"
 EndProject

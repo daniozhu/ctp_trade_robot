@@ -2,13 +2,13 @@
 #include <iostream>
 #include <windows.h>
 
-class CtpLog
+#include "../ctp_trade_strategy/ILog.h"
+
+class CtpLog : public ILog
 {
 public:
-	enum class LogLevel {eNormal, eWarning, eError};
-
 	static CtpLog* Get();
-	void Write(LogLevel leve, const std::wstring& rawMsg);
+	virtual void Write(LogLevel leve, const std::wstring& rawMsg) override;
 
 private:
 	CtpLog();
