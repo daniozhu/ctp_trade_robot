@@ -35,7 +35,7 @@ std::wstring Util::StringToWString(const std::string & srcString)
 	return std::move(wstr);
 }
 
-std::string Util::WStriingToString(const std::wstring & srcWString)
+std::string Util::WStringToString(const std::wstring & srcWString)
 {
 	const int nLen = WideCharToMultiByte(CP_ACP, 0, srcWString.c_str(), -1, NULL, 0, NULL, NULL);
 	if (nLen == 0)

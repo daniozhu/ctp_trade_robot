@@ -13,8 +13,6 @@ namespace Ctp_Trade_Strategy_UnitTest
 		
 		TEST_METHOD(TestMethod_MA5_10_Apply)
 		{
-			Strategy_MA5_10  ma5_10;
-			Assert::IsTrue(ma5_10.Apply());
 		}
 	};
 }

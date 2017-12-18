@@ -53,7 +53,7 @@ bool Strategy_MA5_10::Process()
 	Json::Value value;
 
 	// Caculate MA5 and MA10 for N days back
-	const int nDaysBack = 50;
+	const int nDaysBack = 2;
 
 	for (const auto& idData : m_instrumentIdData)
 	{
@@ -72,18 +72,18 @@ bool Strategy_MA5_10::Process()
 
 		if (value.size() < 11)
 		{
-			LOG_MESSAGE(m_pLog, ILog::LogLevel::eError, L"History data is less than 11 day, cannot apply MA5/MA10 strategry");
+			LOG_MESSAGE(m_pLog, ILog::LogLevel::eError, L"History data is too less, cannot apply MA5/MA10 strategry");
 			continue;
 		}
 
 		// Note: the history vector holds the MA data from latest to old. 
 		// e.g. the item 0 is yesterday's MA data, item 1 is the day before yesterday's MA data.
-		const MA_History_Data ma_5_5d_back = GetMAHistoryData(value, 5, nDaysBack);
+		const MA_History_Data ma_5_nd_back = GetMAHistoryData(value, 5, nDaysBack);
 
-		// Caculate MA10 for 5 days back
-		const MA_History_Data ma_10_5d_back = GetMAHistoryData(value, 10, nDaysBack);
+		// Caculate MA10 for N days back
+		const MA_History_Data ma_10_nd_back = GetMAHistoryData(value, 10, nDaysBack);
 
-		if (ma_5_5d_back.size() != ma_10_5d_back.size())
+		if (ma_5_nd_back.size() != ma_10_nd_back.size())
 		{
 			LOG_MESSAGE(m_pLog, ILog::LogLevel::eError, L"The MA5 and MA10 data is not matched in days");
 			continue;
@@ -96,14 +96,52 @@ bool Strategy_MA5_10::Process()
 		
 		MADataFile << "Date, " << "MA5, " << "MA10" << std::endl;
 
-		for (int i = (int)ma_5_5d_back.size() - 1; i >=0 ; --i)
+		for (int i = (int)ma_5_nd_back.size() - 1; i >=0 ; --i)
 		{
-			MADataFile << ma_5_5d_back[i].first << ", "
-				<< ma_5_5d_back[i].second << ", "
-				<< ma_10_5d_back[i].second << std::endl;
+			MADataFile << ma_5_nd_back[i].first << ", "
+				<< ma_5_nd_back[i].second << ", "
+				<< ma_10_nd_back[i].second << std::endl;
 		}
 		MADataFile.close();
 #endif //  _DEBUG
+
+		const bool bMA5GreaterThanMA10_1d_back = ma_5_nd_back[0].second - ma_10_nd_back[0].second > 0;
+		const bool bMA5GreaterThanMA10_2d_back = ma_5_nd_back[1].second - ma_10_nd_back[1].second > 0;
+
+		const bool bMA5Up_In_2ds = ma_5_nd_back[0].second - ma_5_nd_back[1].second > 0;
+		const bool bMA10Up_In_2ds = ma_10_nd_back[0].second - ma_10_nd_back[1].second > 0;
+
+		// Is golden cross?
+		const bool bGodenCross = bMA5GreaterThanMA10_1d_back && 
+								!bMA5GreaterThanMA10_2d_back && 
+								bMA5Up_In_2ds && 
+								bMA10Up_In_2ds;
+
+		// Is dead cross ?
+		const bool bDeadCross = !bMA5GreaterThanMA10_1d_back &&
+								bMA5GreaterThanMA10_2d_back &&
+								!bMA5Up_In_2ds &&
+								!bMA10Up_In_2ds;
+
+		if (bGodenCross)
+		{
+			TradeSuggestion suggestion;
+			suggestion.InstrumentId = id;
+			suggestion.IsBuy = true;
+			suggestion.Confidence = TradeSuggestion::Level::eNormal;
+
+			m_suggestions.emplace_back(std::move(suggestion));
+		}
+
+		if (bDeadCross)
+		{
+			TradeSuggestion suggestion;
+			suggestion.InstrumentId = id;
+			suggestion.IsBuy = false;
+			suggestion.Confidence = TradeSuggestion::Level::eNormal;
+			
+			m_suggestions.emplace_back(std::move(suggestion));
+		}
 	}
 
 	return true;

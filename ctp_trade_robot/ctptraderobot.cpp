@@ -3,79 +3,35 @@
 
 #include "stdafx.h"
 
-#include "CMarketDataDownLoader.h"
-#include "ConfigReader.h"
-#include "CTPApp.h"
-#include "Util.h"
-#include "CtpLog.h"
-
-#include "../ctp_trade_strategy/strategy_ma5_10.h"
+#include "CtpTradeManager.h"
 
 int main()
 {
-	std::wstring sIniPath = CtpApp::Get()->GetAppDir() + L"\\config.ini";
-	ConfigReader configReader{sIniPath};
+	CtpTradeRobot tradeRobot;
 
-	const StringVector& instrumentIds = configReader.GetInstrumentIds();
-	std::wstring sURL = configReader.GetMarketDataURL();
+	tradeRobot.TradeInCTP();
+	return 1;
 
-	// download market data for each instrument id
-	std::wstring sMarketDataLocalDir		= CtpApp::Get()->GetAppDir() + L"\\RawMarketData";
-	std::wstring sMarketDataLocalDirFormat	= CtpApp::Get()->GetAppDir() + L"\\FormatMarketData";
-	if (!::PathFileExists(sMarketDataLocalDir.c_str())) {
-		::CreateDirectory(sMarketDataLocalDir.c_str(), nullptr);
-	}
-	if (!::PathFileExists(sMarketDataLocalDirFormat.c_str())) {
-		::CreateDirectory(sMarketDataLocalDirFormat.c_str(), nullptr);
-	}
-
-	// TODO: delete old files under the folders
-
-	// build download url for each instrument id
-	StringMap instrumentIdMarketData;
-	bool bRet = false;
-	for (const auto& id : instrumentIds) {
-		std::wstring sMarketDataLocalPath = sMarketDataLocalDir;
-		sMarketDataLocalPath.append(L"\\");
-		sMarketDataLocalPath.append(id);
-		sMarketDataLocalPath.append(L".txt");
-
-		bRet = CMarketDataDownLoader::Get()->Download(sURL + id, sMarketDataLocalPath);
-		if (!bRet)
-			continue;
-
-		// Format the json files
-		std::wstring sMarketDataFormatPath = sMarketDataLocalDirFormat;
-		sMarketDataFormatPath.append(L"\\");
-		sMarketDataFormatPath.append(id);
-		sMarketDataFormatPath.append(L".txt");
-
-		Util::FormatJsonData(sMarketDataLocalPath, sMarketDataFormatPath);
-		
-		// Add the instrument id and its formated market data to the map
-		instrumentIdMarketData.emplace(id, sMarketDataFormatPath);
-	}
-	
-	// Pass the data map to strategy
-	Strategy_MA5_10 strategy_M5_10{ instrumentIdMarketData, CtpLog::Get() };
-	bRet = strategy_M5_10.Process();
-	if (!bRet)
+	if (!tradeRobot.DownloadMarketData())
 	{
-		CtpLog::Get()->Write(ILog::LogLevel::eError, L"Strategy process failed!");
+		system("pause");
 		return -1;
 	}
-	
-	const Strategy::TradeSuggestions& suggestions = strategy_M5_10.GetTradeSuggestions();
-	if (suggestions.empty())
+
+	if (!tradeRobot.ApplyStrategy())
 	{
-		CtpLog::Get()->Write(ILog::LogLevel::eWarning, L"MA5_Ma10 strategy doesn't give any trade suggestions");
-		return 0;
+		system("pause");
+		return -1;
 	}
 
-	// TODO: Start CTP data receiver and transaction process.
+	if (!tradeRobot.TradeInCTP())
+	{
+		system("pause");
+		return -1;
+	}
 
+	system("pause");
 
-	// TODO: make order according to the result ofthe strategy with the input market data
     return 0;
 }
 

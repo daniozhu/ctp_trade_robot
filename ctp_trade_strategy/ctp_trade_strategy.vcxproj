@@ -149,6 +149,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CommonDataType.h" />
     <ClInclude Include="ILog.h" />
     <ClInclude Include="strategy_base.h" />
     <ClInclude Include="strategy_ma5_10.h" />

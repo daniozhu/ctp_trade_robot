@@ -10,10 +10,10 @@ class CTP_TRADE_STRATEGY_API Strategy
 public:
 	struct TradeSuggestion
 	{
-		std::wstring	InstrumentId;
-		bool			IsOpenPosition;
-		bool			IsBuy;
-		unsigned int	Hands;
+		enum class Level	{eStrong, eNormal, eLow};
+		std::wstring		InstrumentId;
+		bool				IsBuy;
+		Level				Confidence;
 	};
 
 	using TradeSuggestions = std::vector<TradeSuggestion>;

@@ -1,8 +1,9 @@
 #pragma once
+
+#include "../ctp_trade_strategy/CommonDataType.h"
+
 #include <string>
 #include <vector>
-
-using StringVector = std::vector<std::wstring>;
 
 class ConfigReader
 {
@@ -12,10 +13,10 @@ public:
 
 	const std::wstring& GetMarketDataURL() const { return m_marketDataURL; }
 	const std::wstring& GetMarketDataLocalDir() const { return m_marketDataLocalDir; }
-	const StringVector& GetInstrumentIds() const { return m_instrumentIds; }
+	const WStringVector& GetInstrumentIds() const { return m_instrumentIds; }
 
 private:
-	StringVector					m_instrumentIds;
+	WStringVector					m_instrumentIds;
 	std::wstring					m_marketDataURL;
 	std::wstring					m_marketDataLocalDir;
 };

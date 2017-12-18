@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="CtpAPI">
+      <UniqueIdentifier>{2fea66e6-7cad-4566-9cee-9845df903793}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -40,6 +43,30 @@
     <ClInclude Include="CtpLog.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\tradeapi_x64\ThostFtdcMdApi.h">
+      <Filter>CtpAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tradeapi_x64\ThostFtdcTraderApi.h">
+      <Filter>CtpAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tradeapi_x64\ThostFtdcUserApiDataType.h">
+      <Filter>CtpAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tradeapi_x64\ThostFtdcUserApiStruct.h">
+      <Filter>CtpAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="CtpMarketDataSpi.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CtpTradeManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CtpTraderSpi.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CtpPosition.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -61,6 +88,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CtpLog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CtpMarketDataSpi.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CtpTradeManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CtpTraderSpi.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CtpPosition.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
