@@ -263,8 +263,17 @@ bool CtpTradeRobot::TradeInCTP()
 	strcpy_s(reqInvestor.InvestorID, g_UserId);
 	TRY_CALL(m_pTraderApi, ReqQryInvestor, &reqInvestor, m_tradeRequestId++);
 
-	// Query current position status
-	// clean up cache first
+	UpdatePositions();
+
+	//m_pMdUserApi->Join();
+	m_pTraderApi->Join();
+
+	return true;
+}
+
+// Get current positions
+bool CtpTradeRobot::UpdatePositions()
+{
 	m_positions.clear();
 
 	CThostFtdcQryInvestorPositionField req{ 0 };
@@ -275,9 +284,6 @@ bool CtpTradeRobot::TradeInCTP()
 		std::unique_lock<std::mutex> lk(m_mutex);
 		m_cond.wait(lk);
 	}
-
-	//m_pMdUserApi->Join();
-	m_pTraderApi->Join();
 
 	return true;
 }

@@ -58,19 +58,11 @@ void CtpTraderSpi::OnRspUserLogin(CThostFtdcRspUserLoginField * pRspUserLogin, C
 
 void CtpTraderSpi::OnRspQryInvestorPosition(CThostFtdcInvestorPositionField * pInvestorPosition, CThostFtdcRspInfoField * pRspInfo, int nRequestID, bool bIsLast)
 {
-	if (pInvestorPosition != nullptr)
-	{
-		std::cout << "合约号，" << "持仓方向，" << "手数， "<<"昨日持仓，" << "今日持仓，" << "开仓量，"
-			 <<"占用的保证金，"<<"手续费，"<<"持仓盈亏" << std::endl;
-		std::cout << pInvestorPosition->InstrumentID << ", " << pInvestorPosition->PosiDirection << ", "
-			<< pInvestorPosition->PositionDate << ", " <<pInvestorPosition->YdPosition << ", " <<
-			pInvestorPosition->TodayPosition << ", " << pInvestorPosition->OpenVolume <<", " << pInvestorPosition->UseMargin
-			<<", "<< pInvestorPosition->Commission <<", "<<pInvestorPosition->PositionProfit << std::endl;
-	}
+	if(pInvestorPosition != nullptr)
+		m_pTradeRobot->m_positions.emplace_back(pInvestorPosition);
 
 	if (bIsLast)
 		m_pTradeRobot->m_cond.notify_all();
-
 }
 
 void CtpTraderSpi::OnRspQryInvestor(CThostFtdcInvestorField * pInvestor, CThostFtdcRspInfoField * pRspInfo, int nRequestID, bool bIsLast)

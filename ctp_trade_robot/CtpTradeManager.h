@@ -25,6 +25,8 @@ public:
 	bool ApplyStrategy();
 	bool TradeInCTP();
 
+	bool UpdatePositions();
+
 private:
 	StringMap			m_instrumentIdMarketData;
 
