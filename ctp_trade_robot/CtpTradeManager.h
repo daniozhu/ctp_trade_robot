@@ -8,9 +8,6 @@
 #include <condition_variable>
 
 
-
-class CThostFtdcMdApi;
-class CtpMarketDataSpi;
 class CThostFtdcTraderApi;
 class CtpTraderSpi;
 
@@ -23,16 +20,14 @@ public:
 
 	bool DownloadMarketData();
 	bool ApplyStrategy();
-	bool TradeInCTP();
+	bool Start();
 
 	bool UpdatePositions();
 
+	bool LogOut();
+
 private:
 	StringMap			m_instrumentIdMarketData;
-
-	//CTP Market api/spi
-	CThostFtdcMdApi*	m_pMdUserApi;
-	CtpMarketDataSpi*	m_pMdUserSpi;
 
 	//CTP trader api/spi
 	CThostFtdcTraderApi*	m_pTraderApi;

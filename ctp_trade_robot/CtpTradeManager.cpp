@@ -6,24 +6,17 @@
 #include "CTPApp.h"
 #include "Util.h"
 #include "CtpLog.h"
-#include "CtpMarketDataSpi.h"
+
 #include "CtpTraderSpi.h"
 #include "CtpPosition.h"
-
 
 #include "../ctp_trade_strategy/strategy_ma5_10.h"
 
 // CTP SDK
-#include "../tradeapi_x64/ThostFtdcMdApi.h"
 #include "../tradeapi_x64/ThostFtdcTraderApi.h"
 
 #include <chrono>
 #include <thread>
-
-// Market Front
-// standard: tcp://180.168.146.187:10010
-// 7x24:     tcp://180.168.146.187:10031
-char* marketfront_address = "tcp://180.168.146.187:10010";
 
 // Trade Front
 // 7x24:       tcp://180.168.146.187:10030
@@ -62,9 +55,7 @@ if (nResult != 0) {												\
 ////////////////////////////////////////
 
 CtpTradeRobot::CtpTradeRobot()
-	:m_pMdUserApi(nullptr)
-	,m_pMdUserSpi(nullptr)
-	,m_pTraderApi(nullptr)
+	:m_pTraderApi(nullptr)
 	,m_pTraderSpi(nullptr)
 	,m_tradeRequestId(0)
 	,m_bIsLogin(false)
@@ -75,15 +66,12 @@ CtpTradeRobot::CtpTradeRobot()
 
 CtpTradeRobot::~CtpTradeRobot()
 {
-	m_pMdUserApi->RegisterSpi(nullptr);
-	m_pMdUserApi->Release();
-	m_pMdUserApi = nullptr;
-	delete m_pMdUserSpi;
-	m_pMdUserSpi = nullptr;
+	if (m_pTraderApi) {
+		m_pTraderApi->RegisterSpi(nullptr);
+		m_pTraderApi->Release();
+		m_pTraderApi = nullptr;
+	}
 
-	m_pTraderApi->RegisterSpi(nullptr);
-	m_pTraderApi->Release();
-	m_pTraderApi = nullptr;
 	delete m_pTraderSpi;
 	m_pTraderSpi = nullptr;
 }
@@ -188,34 +176,21 @@ bool CtpTradeRobot::ApplyStrategy()
 	return true;
 }
 
-bool CtpTradeRobot::TradeInCTP()
-{
-	if (m_pMdUserApi != nullptr || m_pMdUserSpi != nullptr)
-	{
-		CtpLog::Get()->Write(CtpLog::LogLevel::eError, L"CTP is already running in process");
-		return false;
-	}
-
-	// Market API
-	m_pMdUserApi = CThostFtdcMdApi::CreateFtdcMdApi("MarketDataFlow");
-	m_pMdUserSpi = new CtpMarketDataSpi(m_pMdUserApi);
-
+bool CtpTradeRobot::Start()
+{	
 	// Pass in instrument ids that we are interested.
-	NStringVector instruments; 
-	instruments.reserve(m_instrumentIdMarketData.size());
-	std::for_each(m_instrumentIdMarketData.begin(), m_instrumentIdMarketData.end(),
-		[&instruments](const auto& item) {instruments.push_back(Util::WStringToString(item.first)); });
-
-#ifdef _TEST_
-	if (instruments.empty())
-		instruments.push_back("ni1803");
-#endif
-
-	m_pMdUserSpi->SetTargetInstruments(instruments);
-
-	m_pMdUserApi->RegisterSpi(m_pMdUserSpi);
-	m_pMdUserApi->RegisterFront(marketfront_address);
-
+//	NStringVector instruments; 
+//	instruments.reserve(m_instrumentIdMarketData.size());
+//	std::for_each(m_instrumentIdMarketData.begin(), m_instrumentIdMarketData.end(),
+//		[&instruments](const auto& item) {instruments.push_back(Util::WStringToString(item.first)); });
+//
+//#ifdef _TEST_
+//	if (instruments.empty())
+//		instruments.push_back("ni1803");
+//#endif
+//
+////	m_pMdUserSpi->SetTargetInstruments(instruments);
+//
 	// Trader API
 	m_pTraderApi = CThostFtdcTraderApi::CreateFtdcTraderApi("TraderDataFlow");
 	m_pTraderSpi = new CtpTraderSpi(m_pTraderApi, this);
@@ -225,8 +200,7 @@ bool CtpTradeRobot::TradeInCTP()
 	m_pTraderApi->SubscribePublicTopic(THOST_TERT_RESTART);
 	m_pTraderApi->SubscribePrivateTopic(THOST_TERT_RESUME);
 
-	// Start the market and trader threads.
-	//m_pMdUserApi->Init();
+	// Start trade thread.
 	m_pTraderApi->Init();
 
 	// Wait for connected
@@ -263,7 +237,7 @@ bool CtpTradeRobot::TradeInCTP()
 	strcpy_s(reqInvestor.InvestorID, g_UserId);
 	TRY_CALL(m_pTraderApi, ReqQryInvestor, &reqInvestor, m_tradeRequestId++);
 
-	UpdatePositions();
+//	UpdatePositions();
 
 	//m_pMdUserApi->Join();
 	m_pTraderApi->Join();
@@ -284,6 +258,27 @@ bool CtpTradeRobot::UpdatePositions()
 		std::unique_lock<std::mutex> lk(m_mutex);
 		m_cond.wait(lk);
 	}
+
+	return true;
+}
+
+bool CtpTradeRobot::LogOut()
+{
+	CThostFtdcUserLogoutField logoutReq{ 0 };
+	strcpy_s(logoutReq.BrokerID, g_BrokerId);
+	strcpy_s(logoutReq.UserID, g_UserId);
+
+	TRY_CALL(m_pTraderApi, ReqUserLogout, &logoutReq, m_tradeRequestId++);
+	{
+		std::unique_lock<std::mutex> lk(m_mutex);
+		m_cond.wait(lk);
+	}
+
+	m_pTraderApi->RegisterSpi(nullptr);
+	m_pTraderApi->Release();
+	m_pTraderApi = nullptr;
+	delete m_pTraderSpi;
+	m_pTraderSpi = nullptr;
 
 	return true;
 }

@@ -4,33 +4,36 @@
 #include "stdafx.h"
 
 #include "CtpTradeManager.h"
+#include "CtpMarketDataSys.h"
+#include "MessageQueue.h"
+#include "Command.h"
+#include "CTPApp.h"
+
+#include <thread>
 
 int main()
 {
+	// Start trade thread
 	CtpTradeRobot tradeRobot;
+	std::thread tradeThread{&CtpTradeRobot::Start, std::ref(tradeRobot)};
 
-	tradeRobot.TradeInCTP();
-	return 1;
+	// Start market thread
+	CtpMarketDataSys marketSys;
+	std::thread marketThread{&CtpMarketDataSys::Start, std::ref(marketSys)};
 
-	if (!tradeRobot.DownloadMarketData())
+	// TODO: start file monitor thread
+
+	// TODO: get command from message queue
+	while (!CtpApp::Get()->IsTerminating())
 	{
-		system("pause");
-		return -1;
+		CommandPtr spCmd = MessageQueue<CommandPtr>::Get()->Pop();
+		spCmd->Execute();
 	}
 
-	if (!tradeRobot.ApplyStrategy())
-	{
-		system("pause");
-		return -1;
-	}
+	tradeThread.join();
+	marketThread.join();
 
-	if (!tradeRobot.TradeInCTP())
-	{
-		system("pause");
-		return -1;
-	}
-
-	system("pause");
+//	system("pause");
 
     return 0;
 }

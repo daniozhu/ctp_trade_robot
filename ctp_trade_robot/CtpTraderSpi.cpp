@@ -79,6 +79,7 @@ void CtpTraderSpi::OnRspQryInvestor(CThostFtdcInvestorField * pInvestor, CThostF
 void CtpTraderSpi::OnRspUserLogout(CThostFtdcUserLogoutField * pUserLogout, CThostFtdcRspInfoField * pRspInfo, int nRequestID, bool bIsLast)
 {
 	std::cout << "CtpTraderSpi::OnRspUserLogout" << std::endl;
+	m_pTradeRobot->m_bIsLogin = false;
 }
 
 void CtpTraderSpi::OnRspOrderInsert(CThostFtdcInputOrderField * pInputOrder, CThostFtdcRspInfoField * pRspInfo, int nRequestID, bool bIsLast)
