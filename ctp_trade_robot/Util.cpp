@@ -52,3 +52,30 @@ std::string Util::WStringToString(const std::wstring & srcWString)
 
 	return std::move(str);
 }
+
+std::wstring Util::GetFileDir(const std::wstring & filePath)
+{
+	wchar_t szDriver[3];
+	wchar_t	szDir[256];
+	wchar_t szName[256];
+	wchar_t szExt[256];
+
+	_wsplitpath_s(filePath.c_str(), szDriver, szDir, szName, szExt);
+	std::wstring dirPath = szDriver;
+	dirPath.append(szDir);
+	
+	return std::move(dirPath);
+}
+
+FILETIME Util::GetFileLastModifiedTime(const std::wstring & filePath)
+{
+	FILETIME fileTime{ 0 };
+	HANDLE hFile = ::CreateFile(filePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+	if (hFile == INVALID_HANDLE_VALUE)
+		return fileTime;
+
+	::GetFileTime(hFile, NULL, NULL, &fileTime);
+	::CloseHandle(hFile);
+
+	return std::move(fileTime);
+}

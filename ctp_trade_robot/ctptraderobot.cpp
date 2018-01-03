@@ -9,10 +9,16 @@
 #include "Command.h"
 #include "CTPApp.h"
 
+#include "FileMonitor.h"
+
 #include <thread>
 
 int main()
 {
+	std::unique_ptr<FileChangeObserver> spObserver{ new CmdFileChangeObserver(L"D:\\cmd.txt") };
+	FileMonitor::Get()->Add(spObserver.get());
+	FileMonitor::Get()->Start();
+
 	// Start trade thread
 	CtpTradeRobot tradeRobot;
 	std::thread tradeThread{&CtpTradeRobot::Start, std::ref(tradeRobot)};

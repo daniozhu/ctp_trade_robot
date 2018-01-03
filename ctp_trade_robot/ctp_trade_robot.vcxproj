@@ -173,6 +173,7 @@ copy $(solutiondir)tradeapi_x64\thosttraderapi.dll $(outdir)thosttraderapi.dll /
     <ClInclude Include="CtpPosition.h" />
     <ClInclude Include="CtpTradeManager.h" />
     <ClInclude Include="CtpTraderSpi.h" />
+    <ClInclude Include="FileMonitor.h" />
     <ClInclude Include="MessageQueue.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -192,6 +193,7 @@ copy $(solutiondir)tradeapi_x64\thosttraderapi.dll $(outdir)thosttraderapi.dll /
     <ClCompile Include="CtpTradeManager.cpp" />
     <ClCompile Include="ctptraderobot.cpp" />
     <ClCompile Include="CtpTraderSpi.cpp" />
+    <ClCompile Include="FileMonitor.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

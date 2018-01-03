@@ -5,4 +5,6 @@ namespace Util
 	std::wstring StringToWString(const std::string& srcString);
 	std::string  WStringToString(const std::wstring& srcWString);
 
+	std::wstring GetFileDir(const std::wstring& filePath);
+	FILETIME GetFileLastModifiedTime(const std::wstring& filePath);
 };
