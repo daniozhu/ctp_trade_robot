@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "CtpTraderSpi.h"
-#include "CtpTradeManager.h"
+#include "CtpTradeSys.h"
 
 
 #include "../tradeapi_x64/ThostFtdcTraderApi.h"
 
 static int g_tradeReqId = 0;
 
-CtpTraderSpi::CtpTraderSpi(CThostFtdcTraderApi* pTraderUserApi, CtpTradeRobot* pTradeRobot)
+CtpTraderSpi::CtpTraderSpi(CThostFtdcTraderApi* pTraderUserApi, CtpTradeSys* pTradeRobot)
 	: m_pTraderUserApi(pTraderUserApi)
 	, m_pTradeRobot(pTradeRobot)
 {

@@ -38,8 +38,38 @@ bool CtpMarketDataSys::Start()
 	m_pMdUserApi->RegisterSpi(m_pMdUserSpi);
 	m_pMdUserApi->RegisterFront(marketfront_address);
 	m_pMdUserApi->Init();
+	
 
-	m_pMdUserApi->Join();
+	// TODO: login
 
 	return true;
+}
+
+bool CtpMarketDataSys::Stop()
+{
+	// TODO: Logout first
+
+	// Release
+	if (m_pMdUserApi) {
+		m_pMdUserApi->RegisterSpi(nullptr);
+		m_pMdUserApi->Release();
+		m_pMdUserApi = nullptr;
+	}
+
+	delete m_pMdUserSpi;
+	m_pMdUserSpi = nullptr;
+
+	return true;
+}
+
+void CtpMarketDataSys::Join()
+{
+	if (m_pMdUserApi != nullptr)
+		m_pMdUserApi->Join();
+}
+
+CtpMarketDataSys * CtpMarketDataSys::Get()
+{
+	static CtpMarketDataSys s_ctpMarketSys;
+	return &s_ctpMarketSys;
 }

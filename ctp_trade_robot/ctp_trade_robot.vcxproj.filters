@@ -58,9 +58,6 @@
     <ClInclude Include="CtpMarketDataSpi.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CtpTradeManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="CtpTraderSpi.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -77,6 +74,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="FileMonitor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CtpTradeSys.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdFile.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -105,9 +108,6 @@
     <ClCompile Include="CtpMarketDataSpi.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CtpTradeManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="CtpTraderSpi.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -123,5 +123,14 @@
     <ClCompile Include="FileMonitor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="CtpTradeSys.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdFile.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cmd.ini" />
   </ItemGroup>
 </Project>

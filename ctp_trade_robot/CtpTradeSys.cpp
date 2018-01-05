@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "CtpTradeManager.h"
+#include "CtpTradeSys.h"
 
 #include "CMarketDataDownLoader.h"
 #include "ConfigReader.h"
@@ -36,25 +36,24 @@ int nTry = 0;
 int nResult = 0;
 
 #define TRY_CALL(pCtpApi, funcName, pReqField, nReqId)			\
-nTry = 0;														\
-nResult = pCtpApi->##funcName(pReqField, nReqId);				\
-while(nResult != 0 && nTry++ < MAX_TRY) {						\
-	std::this_thread::sleep_for(std::chrono::milliseconds(500));\
-	nResult = pCtpApi->##funcName(pReqField, nReqId);			\
-}																\
-if (nResult != 0) {												\
-	std::cout << "Call the function failed, " << #funcName <<	\
-	", return value = "	<< nResult << std::endl;				\
-	return false;												\
+nTry = 0;																							\
+nResult = pCtpApi->##funcName(pReqField, nReqId);					\
+while(nResult != 0 && nTry++ < MAX_TRY) {									\
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));		\
+	nResult = pCtpApi->##funcName(pReqField, nReqId);				\
+}																										\
+if (nResult != 0) {																				\
+	std::cout << "Call the function failed, " << #funcName <<			\
+	", return value = "	<< nResult << std::endl;								\
+	return false;																					\
 }
-
 
 
 ////////////////////////////////////////
 // CtpTradeRobot
 ////////////////////////////////////////
 
-CtpTradeRobot::CtpTradeRobot()
+CtpTradeSys::CtpTradeSys()
 	:m_pTraderApi(nullptr)
 	,m_pTraderSpi(nullptr)
 	,m_tradeRequestId(0)
@@ -64,7 +63,7 @@ CtpTradeRobot::CtpTradeRobot()
 
 }
 
-CtpTradeRobot::~CtpTradeRobot()
+CtpTradeSys::~CtpTradeSys()
 {
 	if (m_pTraderApi) {
 		m_pTraderApi->RegisterSpi(nullptr);
@@ -76,7 +75,7 @@ CtpTradeRobot::~CtpTradeRobot()
 	m_pTraderSpi = nullptr;
 }
 
-
+/*
 bool CtpTradeRobot::DownloadMarketData()
 {
 	std::wstring sIniPath = CtpApp::Get()->GetAppDir() + L"\\config.ini";
@@ -124,7 +123,9 @@ bool CtpTradeRobot::DownloadMarketData()
 
 	return true;
 }
+*/
 
+/*
 bool CtpTradeRobot::ApplyStrategy()
 {
 	// Pass the data map to strategy
@@ -175,8 +176,9 @@ bool CtpTradeRobot::ApplyStrategy()
 
 	return true;
 }
+*/
 
-bool CtpTradeRobot::Start()
+bool CtpTradeSys::Start()
 {	
 	// Pass in instrument ids that we are interested.
 //	NStringVector instruments; 
@@ -240,11 +242,12 @@ bool CtpTradeRobot::Start()
 //	UpdatePositions();
 
 	//m_pMdUserApi->Join();
-	m_pTraderApi->Join();
+	//m_pTraderApi->Join();
 
 	return true;
 }
 
+/*
 // Get current positions
 bool CtpTradeRobot::UpdatePositions()
 {
@@ -261,9 +264,11 @@ bool CtpTradeRobot::UpdatePositions()
 
 	return true;
 }
+*/
 
-bool CtpTradeRobot::LogOut()
+bool CtpTradeSys::Stop()
 {
+	/*
 	CThostFtdcUserLogoutField logoutReq{ 0 };
 	strcpy_s(logoutReq.BrokerID, g_BrokerId);
 	strcpy_s(logoutReq.UserID, g_UserId);
@@ -273,14 +278,32 @@ bool CtpTradeRobot::LogOut()
 		std::unique_lock<std::mutex> lk(m_mutex);
 		m_cond.wait(lk);
 	}
+	*/
 
-	m_pTraderApi->RegisterSpi(nullptr);
-	m_pTraderApi->Release();
-	m_pTraderApi = nullptr;
+	if (m_pTraderApi != nullptr) 
+	{
+		m_pTraderApi->RegisterSpi(nullptr);
+		m_pTraderApi->Release();
+		m_pTraderApi = nullptr;
+	}
+
 	delete m_pTraderSpi;
 	m_pTraderSpi = nullptr;
 
 	return true;
+}
+
+void CtpTradeSys::Join()
+{
+	if(m_pTraderApi != nullptr)
+		m_pTraderApi->Join();
+}
+
+// Static
+CtpTradeSys* CtpTradeSys::Get()
+{
+	static CtpTradeSys s_ctpTradeSys;
+	return &s_ctpTradeSys;
 }
 
 

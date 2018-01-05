@@ -5,6 +5,7 @@
 
 class CtpMarketDataSpi : public CThostFtdcMdSpi
 {
+	
 public:
 	CtpMarketDataSpi(CThostFtdcMdApi* pUserApi);
 	virtual ~CtpMarketDataSpi();
@@ -32,6 +33,6 @@ public:
 
 private:
 	CThostFtdcMdApi*			m_pMdUserApi;
-	NStringVector				m_instruments;
+	NStringVector					m_instruments;
 };
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "../tradeapi_x64/ThostFtdcTraderApi.h"
 class CThostFtdcTraderApi;
-class CtpTradeRobot;
+class CtpTradeSys;
 
 
 extern const char*	g_BrokerId;
@@ -12,7 +12,7 @@ extern const char* 	g_Password;
 class CtpTraderSpi : public CThostFtdcTraderSpi
 {
 public:
-	CtpTraderSpi(CThostFtdcTraderApi* pTraderUserApi, CtpTradeRobot* pTradeRobot);
+	CtpTraderSpi(CThostFtdcTraderApi* pTraderUserApi, CtpTradeSys* pTradeRobot);
 	virtual ~CtpTraderSpi();
 
 	virtual void OnFrontConnected() override;
@@ -327,6 +327,6 @@ public:
 // Data members
 	private:
 		CThostFtdcTraderApi*		m_pTraderUserApi;
-		CtpTradeRobot*				m_pTradeRobot;
+		CtpTradeSys*				m_pTradeRobot;
 };
 

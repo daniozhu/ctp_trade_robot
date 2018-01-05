@@ -2,6 +2,11 @@
 #include "FileMonitor.h"
 
 #include "Util.h"
+#include "CmdFile.h"
+#include "CTPApp.h"
+#include "MessageQueue.h"
+#include "Command.h"
+
 
 ///////////////////////////////////////////////////
 // FileEntry
@@ -146,6 +151,8 @@ public:
 
 	void Start();
 	void Kill();
+	void Join();
+
 private:
 	FileMonitorImp();
 	~FileMonitorImp();
@@ -161,7 +168,7 @@ private:
 
 	HANDLE				m_hEvent;
 	HANDLE				m_handles[MAX_PATH];
-	int					m_nHandles;
+	int						m_nHandles;
 	std::thread			m_thread;
 	volatile bool		m_bKillThread;
 	//	std::mutex			m_mutex;
@@ -185,6 +192,12 @@ void FileMonitorImp::Start()
 {
 	m_hEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
 	m_thread = std::thread(&FileMonitorImp::WatchFileChange, std::ref(*this));
+}
+
+void FileMonitorImp::Join()
+{
+	if (m_thread.joinable())
+		m_thread.join();
 }
 
 void FileMonitorImp::Add(const FileChangeObserver * pObserver)
@@ -222,8 +235,6 @@ void FileMonitorImp::Kill()
 {
 	m_bKillThread = true;
 	::SetEvent(m_hEvent);
-
-	m_thread.join();
 }
 
 void FileMonitorImp::WatchFileChange()
@@ -314,6 +325,13 @@ void FileMonitor::Kill()
 	m_pImp->Kill();
 }
 
+void FileMonitor::Join()
+{
+	m_pImp->Join();
+}
+
+
+
 FileMonitor * FileMonitor::Get()
 {
 	static FileMonitor g_fileMonitor;
@@ -343,6 +361,12 @@ void CmdFileChangeObserver::OnChange()
 {
 	// TODO
 	std::cout << "File changed" << std::endl;
+
+	CmdFile::Get()->Refresh();
+	if (CmdFile::Get()->IsTerminatingApp())
+	{
+		MessageQueue<CommandPtr>::Get()->Push(CommandPtr(new TerminateCommand()));
+	}
 }
 
 

@@ -12,6 +12,7 @@ public:
 
 	void Start();
 	void Kill();
+	void Join();
 
 	static FileMonitor* Get();
 

@@ -112,6 +112,7 @@
     </Link>
     <PostBuildEvent>
       <Command>copy $(projectdir)\config.ini $(outdir)config.ini /y
+copy $(projectdir)\cmd.ini $(outdir)cmd.ini /y
 copy $(solutiondir)tradeapi_x64\thostmduserapi.dll $(outdir)thostmduserapi.dll /y
 copy $(solutiondir)tradeapi_x64\thosttraderapi.dll $(outdir)thosttraderapi.dll /y
 </Command>
@@ -164,6 +165,7 @@ copy $(solutiondir)tradeapi_x64\thosttraderapi.dll $(outdir)thosttraderapi.dll /
     <ClInclude Include="..\tradeapi_x64\ThostFtdcUserApiDataType.h" />
     <ClInclude Include="..\tradeapi_x64\ThostFtdcUserApiStruct.h" />
     <ClInclude Include="CMarketDataDownLoader.h" />
+    <ClInclude Include="CmdFile.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="ConfigReader.h" />
     <ClInclude Include="CTPApp.h" />
@@ -171,7 +173,7 @@ copy $(solutiondir)tradeapi_x64\thosttraderapi.dll $(outdir)thosttraderapi.dll /
     <ClInclude Include="CtpMarketDataSpi.h" />
     <ClInclude Include="CtpMarketDataSys.h" />
     <ClInclude Include="CtpPosition.h" />
-    <ClInclude Include="CtpTradeManager.h" />
+    <ClInclude Include="CtpTradeSys.h" />
     <ClInclude Include="CtpTraderSpi.h" />
     <ClInclude Include="FileMonitor.h" />
     <ClInclude Include="MessageQueue.h" />
@@ -183,6 +185,7 @@ copy $(solutiondir)tradeapi_x64\thosttraderapi.dll $(outdir)thosttraderapi.dll /
     <ClCompile Include="CMarketDataDownLoader.cpp">
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
+    <ClCompile Include="CmdFile.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="ConfigReader.cpp" />
     <ClCompile Include="CTPApp.cpp" />
@@ -190,7 +193,7 @@ copy $(solutiondir)tradeapi_x64\thosttraderapi.dll $(outdir)thosttraderapi.dll /
     <ClCompile Include="CtpMarketDataSpi.cpp" />
     <ClCompile Include="CtpMarketDataSys.cpp" />
     <ClCompile Include="CtpPosition.cpp" />
-    <ClCompile Include="CtpTradeManager.cpp" />
+    <ClCompile Include="CtpTradeSys.cpp" />
     <ClCompile Include="ctptraderobot.cpp" />
     <ClCompile Include="CtpTraderSpi.cpp" />
     <ClCompile Include="FileMonitor.cpp" />
@@ -201,6 +204,9 @@ copy $(solutiondir)tradeapi_x64\thosttraderapi.dll $(outdir)thosttraderapi.dll /
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Util.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cmd.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
