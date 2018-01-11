@@ -214,10 +214,81 @@ void CtpTraderSpi::OnRspError(CThostFtdcRspInfoField * pRspInfo, int nRequestID,
 
 void CtpTraderSpi::OnRtnOrder(CThostFtdcOrderField * pOrder)
 {
+	if (pOrder != nullptr)
+	{
+		std::string status = "";
+		switch (pOrder->OrderStatus)
+		{
+		case '0':
+			status = "全部成交";
+			break;
+		case '1':
+			status = "部分成交还在队列中";
+			break;
+		case '2':
+			status = "部分成交不在队列中";
+			break;
+		case '3':
+			status = "未成交还在队列中";
+			break;
+		case '4':
+			status = "未成交不在队列中";
+			break;
+		case '5':
+			status = "撤单";
+			break;
+		case 'a':
+			status = "未知";
+			break;
+		case 'b':
+			status = "尚未触发";
+			break;
+		case 'c':
+			status = "已触发";
+			break;
+
+		default:
+			status = "未知";
+		}
+		std::cout << status << std::endl;
+
+		std::string submitStatus = "";
+		switch (pOrder->OrderSubmitStatus)
+		{
+		case '0':
+			submitStatus = "已经提交";
+			break;
+		case '1':
+			submitStatus = "撤单已经提交";
+			break;
+		case '2':
+			submitStatus = "修改已经提交";
+			break;
+		case '3':
+			submitStatus = "已经接受";
+			break;
+		case '4':
+			submitStatus = "报单已经被拒绝";
+			break;
+		case '5':
+			submitStatus = "撤单已经被拒绝";
+			break;
+		case '6':
+			submitStatus = "改单已经被拒绝";
+			break;
+		default:
+			submitStatus = "Unknow";
+		}
+		std::cout << submitStatus << std::endl;
+	}
 }
 
 void CtpTraderSpi::OnRtnTrade(CThostFtdcTradeField * pTrade)
 {
+	if (pTrade != nullptr)
+	{
+		// TODO
+	}
 }
 
 void CtpTraderSpi::OnErrRtnOrderInsert(CThostFtdcInputOrderField * pInputOrder, CThostFtdcRspInfoField * pRspInfo)

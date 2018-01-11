@@ -7,4 +7,7 @@ namespace Util
 
 	std::wstring GetFileDir(const std::wstring& filePath);
 	FILETIME GetFileLastModifiedTime(const std::wstring& filePath);
+
+	void SplitCharToVector(const wchar_t* pszValue, std::vector<std::wstring>& strVector);
+
 };

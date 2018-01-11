@@ -2,6 +2,7 @@
 
 #include "ConfigReader.h"
 #include "CtpLog.h"
+#include "Util.h"
 
 const static TCHAR* const APPNAME_MARKETDATA		= L"MarketData";
 const static TCHAR* const KEYNAME_URL				= L"URL";
@@ -30,29 +31,7 @@ ConfigReader::ConfigReader(const std::wstring & sIniPath)
 
 	// Get instrument ids that we want to get the market data
 	::GetPrivateProfileString(APPNAME_MARKETDATA, KEYNAME_INSTRUMENTID, DEFAULT_STRING, szValue, MAX_PATH, sIniPath.c_str());
-		
-	TCHAR temp[MAX_PATH] = { 0 };
 
-	int index = 0;
-	TCHAR* p = szValue;
-	for (; *p != L'\0'; ++p)
-	{
-		if (*p != L' ' && *p != ';')
-		{
-			temp[index] = *p;
-			index++;
-		}
-		else if (*p == L';')
-		{
-			m_instrumentIds.push_back(temp);
-
-			memset(temp, L'\0', sizeof(temp));
-			index = 0;
-		}
-	}
-
-	// last element
-	if(wcsnlen_s(temp, MAX_PATH) > 0)
-		m_instrumentIds.push_back(temp);
+	Util::SplitCharToVector(szValue, m_instrumentIds);
 }
 

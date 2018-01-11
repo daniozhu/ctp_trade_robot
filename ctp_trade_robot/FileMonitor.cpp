@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "FileMonitor.h"
 
-#include "Util.h"
 #include "CmdFile.h"
 #include "CTPApp.h"
 #include "MessageQueue.h"
 #include "Command.h"
+#include "CtpTradeSys.h"
+#include "Util.h"
 
 
 ///////////////////////////////////////////////////
@@ -357,16 +358,32 @@ CmdFileChangeObserver::CmdFileChangeObserver(const std::wstring & filePath)
 {
 }
 
+CmdFileChangeObserver::CmdFileChangeObserver()
+	:FileChangeObserver(CtpApp::Get()->GetAppDir() + L"\\cmd.ini")
+{
+}
+
+
 void CmdFileChangeObserver::OnChange()
 {
-	// TODO
 	std::cout << "File changed" << std::endl;
 
 	CmdFile::Get()->Refresh();
 	if (CmdFile::Get()->IsTerminatingApp())
 	{
 		MessageQueue<CommandPtr>::Get()->Push(CommandPtr(new TerminateCommand()));
+
+		// If we are going to terminate application, there is no need to process other commands anymore.
+		return;
 	}
+
+	const auto& openPositions = CmdFile::Get()->GetOpenPositions();
+	if (!openPositions.empty())
+	{
+		MessageQueue<CommandPtr>::Get()->Push(CommandPtr(new OpenPositionCommand(openPositions)));
+	}
+	
+	// TODO: close positions
 }
 
 

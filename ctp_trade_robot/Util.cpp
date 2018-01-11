@@ -79,3 +79,31 @@ FILETIME Util::GetFileLastModifiedTime(const std::wstring & filePath)
 
 	return std::move(fileTime);
 }
+
+void Util::SplitCharToVector(const wchar_t* pszValue, std::vector<std::wstring>& strVector)
+{
+	wchar_t temp[MAX_PATH] = { 0 };
+
+	int index = 0;
+	const wchar_t* p = pszValue;
+	for (; *p != L'\0'; ++p)
+	{
+		if (*p != L' ' && *p != ';')
+		{
+			temp[index] = *p;
+			index++;
+		}
+		else if (*p == L';')
+		{
+			strVector.push_back(temp);
+
+			memset(temp, L'\0', sizeof(temp));
+			index = 0;
+		}
+	}
+
+	// last element
+	if (wcsnlen_s(temp, MAX_PATH) > 0)
+		strVector.push_back(temp);
+
+}

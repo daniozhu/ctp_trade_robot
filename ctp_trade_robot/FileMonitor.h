@@ -41,6 +41,9 @@ class CmdFileChangeObserver : public FileChangeObserver
 {
 public:
 	CmdFileChangeObserver(const std::wstring& filePath);
+	CmdFileChangeObserver();
+
+	virtual ~CmdFileChangeObserver() = default;
 
 	virtual void OnChange() override;
 };

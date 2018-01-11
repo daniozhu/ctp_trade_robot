@@ -20,8 +20,7 @@ int main()
 	CtpMarketDataSys::Get()->Start();
 
 	// Start file monitor for command file
-	std::wstring cmdFilePath = CtpApp::Get()->GetAppDir() + L"\\cmd.ini";
-	std::unique_ptr<FileChangeObserver> spObserver{ new CmdFileChangeObserver(cmdFilePath) };
+	std::unique_ptr<FileChangeObserver> spObserver{ new CmdFileChangeObserver() };
 	FileMonitor::Get()->Add(spObserver.get());
 	FileMonitor::Get()->Start();
 

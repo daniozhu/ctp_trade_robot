@@ -306,4 +306,14 @@ CtpTradeSys* CtpTradeSys::Get()
 	return &s_ctpTradeSys;
 }
 
+bool CtpTradeSys::InsertOrder(CThostFtdcInputOrderField * pInputOrder)
+{
+	if (m_pTraderApi == nullptr)
+		return false;
+
+	TRY_CALL(m_pTraderApi, ReqOrderInsert, pInputOrder, m_tradeRequestId++);
+
+	return true;
+}
+
 

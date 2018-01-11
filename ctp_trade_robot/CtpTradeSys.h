@@ -10,6 +10,7 @@
 
 class CThostFtdcTraderApi;
 class CtpTraderSpi;
+struct CThostFtdcInputOrderField;
 
 class CtpTradeSys
 {
@@ -26,6 +27,9 @@ public:
 	void Join();
 
 	static CtpTradeSys* Get();
+
+	// Trade actions
+	bool InsertOrder(CThostFtdcInputOrderField *pInputOrder);
 
 private:
 	CtpTradeSys();
