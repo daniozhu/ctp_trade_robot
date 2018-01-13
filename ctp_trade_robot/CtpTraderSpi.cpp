@@ -84,6 +84,10 @@ void CtpTraderSpi::OnRspUserLogout(CThostFtdcUserLogoutField * pUserLogout, CTho
 
 void CtpTraderSpi::OnRspOrderInsert(CThostFtdcInputOrderField * pInputOrder, CThostFtdcRspInfoField * pRspInfo, int nRequestID, bool bIsLast)
 {
+	std::cout << __FUNCTION__ << std::endl;
+	if (pRspInfo != nullptr && pRspInfo->ErrorID != 0) {
+			std::cout << pRspInfo->ErrorMsg << std::endl;
+	}
 }
 
 void CtpTraderSpi::OnRspParkedOrderInsert(CThostFtdcParkedOrderField * pParkedOrder, CThostFtdcRspInfoField * pRspInfo, int nRequestID, bool bIsLast)
@@ -96,6 +100,7 @@ void CtpTraderSpi::OnRspParkedOrderAction(CThostFtdcParkedOrderActionField * pPa
 
 void CtpTraderSpi::OnRspOrderAction(CThostFtdcInputOrderActionField * pInputOrderAction, CThostFtdcRspInfoField * pRspInfo, int nRequestID, bool bIsLast)
 {
+	std::cout << __FUNCTION__ << std::endl;
 }
 
 void CtpTraderSpi::OnRspQueryMaxOrderVolume(CThostFtdcQueryMaxOrderVolumeField * pQueryMaxOrderVolume, CThostFtdcRspInfoField * pRspInfo, int nRequestID, bool bIsLast)
@@ -123,6 +128,7 @@ void CtpTraderSpi::OnRspRemoveParkedOrderAction(CThostFtdcRemoveParkedOrderActio
 
 void CtpTraderSpi::OnRspExecOrderInsert(CThostFtdcInputExecOrderField * pInputExecOrder, CThostFtdcRspInfoField * pRspInfo, int nRequestID, bool bIsLast)
 {
+	std::cout << __FUNCTION__ << std::endl;
 }
 
 void CtpTraderSpi::OnRspExecOrderAction(CThostFtdcInputExecOrderActionField * pInputExecOrderAction, CThostFtdcRspInfoField * pRspInfo, int nRequestID, bool bIsLast)
@@ -210,10 +216,13 @@ void CtpTraderSpi::OnRspQryQuote(CThostFtdcQuoteField * pQuote, CThostFtdcRspInf
 
 void CtpTraderSpi::OnRspError(CThostFtdcRspInfoField * pRspInfo, int nRequestID, bool bIsLast)
 {
+	std::cout << __FUNCTION__ << std::endl;
 }
 
 void CtpTraderSpi::OnRtnOrder(CThostFtdcOrderField * pOrder)
 {
+	std::cout << __FUNCTION__ << std::endl;
+
 	if (pOrder != nullptr)
 	{
 		std::string status = "";
@@ -285,6 +294,8 @@ void CtpTraderSpi::OnRtnOrder(CThostFtdcOrderField * pOrder)
 
 void CtpTraderSpi::OnRtnTrade(CThostFtdcTradeField * pTrade)
 {
+	std::cout << __FUNCTION__ << std::endl;
+
 	if (pTrade != nullptr)
 	{
 		// TODO

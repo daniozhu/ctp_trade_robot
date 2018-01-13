@@ -49,6 +49,7 @@ void OpenPositionCommand::Execute()
 	CThostFtdcInputOrderField reqField = { 0 };
 	strcpy_s(reqField.BrokerID, g_BrokerId);
 	strcpy_s(reqField.InvestorID, g_UserId);
+	strcpy_s(reqField.UserID, g_UserId);
 
 	reqField.Direction = THOST_FTDC_D_Buy;
 	reqField.CombHedgeFlag[0] = THOST_FTDC_HF_Speculation;
@@ -80,7 +81,8 @@ void OpenPositionCommand::Execute()
 	// Market order
 	reqField.OrderPriceType = THOST_FTDC_OPT_AnyPrice;
 	reqField.LimitPrice = 0;
-	reqField.TimeCondition = THOST_FTDC_TC_IOC; // immidate or cancel
+	reqField.TimeCondition = THOST_FTDC_TC_IOC;
+	reqField.ContingentCondition = THOST_FTDC_CC_Immediately;
 
 	for (const auto& instrumentId : m_instrumentIds)
 	{

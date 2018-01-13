@@ -17,7 +17,7 @@ int main()
 	CtpTradeSys::Get()->Start();
 
 	// Start market data system
-	CtpMarketDataSys::Get()->Start();
+	//CtpMarketDataSys::Get()->Start();
 
 	// Start file monitor for command file
 	std::unique_ptr<FileChangeObserver> spObserver{ new CmdFileChangeObserver() };
